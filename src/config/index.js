@@ -277,7 +277,7 @@ export const config  = {
         showMacOS: true,
         showWindows: true,
         showLinux: true,
-        showOpenWrt: true,
+        showOpenWrt: false,
 
         // 客户端下载链接  //可以改成文档链接直接在新标签页打开
         clientLinks: {
