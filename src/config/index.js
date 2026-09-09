@@ -1,6 +1,6 @@
 /**
  * 外部配置文件
- * index.html 中可以搜索 EZ 将其替换为您的网站名称
+ * index.html 中可以搜索 达世界 将其替换为您的网站名称
  * logo 摆放位置为 images/logo.png
  */
 
@@ -29,9 +29,9 @@ export const config  = {
         // 支持字符串形式(单个API地址)或数组形式(多个备选API地址)
         // 多个地址时，会按顺序检测可用性，并使用第一个可用的地址
         staticBaseUrl: [
-            'https://skhsn6q4pnv95.ezdemo.xyz/api/v1',
-            'https://skhsn6q4pnv95.ezdemo.xyz/api/v1',
-            'https://gy1v06omopzc8.ezdemo.xyz/api/v1'
+            'https://www.download.the-best-chinaos.com/api/v1',
+            'https://download.the-best-chinaos.com/api/v1',
+            'https://api-day-dashijie.toworld.uk/api/v1'
         ],
       
         // 自动获取模式配置 (urlMode = 'auto'时使用)
@@ -52,8 +52,8 @@ export const config  = {
     API_MIDDLEWARE_ENABLED: false,
   
     //=======================================================
-    // 中间件服务器URL (不含路径) 开源地址 https://github.com/codeman857/EZ-Encrypt-Middleware
-    API_MIDDLEWARE_URL: 'https://d2ijw202als7c.ezdemo.xyz',
+    // 中间件服务器URL (不含路径) 开源地址 https://github.com/codeman857/达世界-Encrypt-Middleware
+    API_MIDDLEWARE_URL: 'https://d2ijw202als7c.asdasd.xyz',
   
     // 中间件加密KEY必须是16位的16进制字符串，必须和中间件key保持一致 在线生成地址 https://www.bejson.com/math/hex_gen/
     API_MIDDLEWARE_KEY: '4c6f8e5f9467dc71',
@@ -66,10 +66,10 @@ export const config  = {
 
     // ====================  网站基础配置  ====================
     SITE_CONFIG: {
-        siteName: 'EZ THEME',
-        siteDescription: 'EZ UI',
+        siteName: 'To World',
+        siteDescription: '达世界 UI',
         // copyright会自动使用当前年份
-        copyright: `© ${new Date().getFullYear()} EZ THEME. All Rights Reserved.`,
+        copyright: `© ${new Date().getFullYear()} To World. All Rights Reserved.`,
 
         // 是否显示标题中的网站Logo (true=显示, false=隐藏)
         showLogo: true,
@@ -89,7 +89,7 @@ export const config  = {
         // 自定义landing页面路径（相对于public目录
         // 例如：'testlandingpage.html'
         // 如果为空则不启用自定义landing页面
-        customLandingPage: ''
+        customLandingPage: 'landingpage.html'
     },
 
     // 默认语言和主题配置
@@ -282,11 +282,11 @@ export const config  = {
         // 客户端下载链接  //可以改成文档链接直接在新标签页打开
         clientLinks: {
             ios: 'https://apps.apple.com/app/xxx',
-            android: 'https://play.google.com/store/apps/xxx',
-            macos: 'https://github.com/xxx/releases/latest',
-            windows: 'https://github.com/xxx/releases/latest',
-            linux: 'https://github.com/xxx/releases/latest',
-            openwrt: 'https://github.com/xxx/releases/latest'
+            android: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest',
+            macos: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest',
+            windows: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest',
+            linux: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest',
+            openwrt: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest'
         },
 
         // 订阅导入客户端显示控制 部分面板不支持SingBox导入请您注意检查
@@ -358,7 +358,7 @@ export const config  = {
     // 验证码配置
     CAPTCHA_CONFIG: {
         // 验证方式: 'google' 或 'cloudflare'
-        captchaType: 'google',
+        captchaType: 'cloudflare',
 
         // Google reCAPTCHA 配置 默认v2版本
         google: {

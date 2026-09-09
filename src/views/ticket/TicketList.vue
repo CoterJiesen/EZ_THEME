@@ -1777,7 +1777,7 @@ onUnmounted(() => {
     // }
 }
 
-// 仅在 EZ 主题为暗色时生效
+// 仅在 达世界 主题为暗色时生效
 :global(body.dark-theme) .ticket-detail-content {
   background-color: rgba(20, 25, 30, 0.7);
   background-image: linear-gradient(to bottom, rgba(30,35,40,.4), rgba(15,20,25,.4));

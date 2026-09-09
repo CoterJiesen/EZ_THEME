@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <meta name="description" content="Privacy Policy - ToWorld">
+    <meta name="keywords" content="ToWorld,Privacy Policy,privacy">
+    <title>Privacy Policy - ToWorld</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #1a1a2e;
+            background: #f5f7fb;
+            line-height: 1.75;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== Navbar (same as home) ===== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(13, 16, 35, 0.92);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .navbar .container {
+            max-width: 1140px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .navbar .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .navbar .logo .globe { font-size: 22px; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+        .nav-links .nav-item {
+            color: rgba(255,255,255,0.75);
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links .nav-item:hover { color: #fff; }
+        .nav-links .nav-item.active { color: #9db3ff; }
+        .btn-login {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: opacity 0.2s;
+        }
+        .btn-login:hover { opacity: 0.9; }
+        .navbar-toggler {
+            display: none;
+            background: none;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+        .navbar-toggler svg { display: block; }
+
+        /* ===== Page header ===== */
+        .page-header {
+            padding: 150px 0 56px;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+        }
+        .page-header h1 {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .page-header p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.65);
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ===== Policy body ===== */
+        .policy {
+            padding: 48px 0 72px;
+        }
+        .policy .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 48px 52px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+        }
+        .policy h2 {
+            font-size: 21px;
+            font-weight: 700;
+            margin: 36px 0 14px;
+            padding-left: 14px;
+            border-left: 4px solid #667eea;
+            line-height: 1.4;
+        }
+        .policy h2:first-child { margin-top: 0; }
+        .policy h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 20px 0 8px;
+            color: #334;
+        }
+        .policy p {
+            font-size: 15px;
+            color: #4a4a5a;
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        .policy ul {
+            margin: 8px 0 14px 22px;
+            padding: 0;
+        }
+        .policy ul li {
+            font-size: 15px;
+            color: #4a4a5a;
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        .policy .intro {
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eceef4;
+            margin-bottom: 4px;
+        }
+        .policy .meta {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+        .policy .note {
+            background: #f7f9fc;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 14px;
+            color: #6b7280;
+            margin: 16px 0;
+        }
+        .policy a { color: #667eea; }
+        .policy a:hover { text-decoration: underline; }
+
+        /* ===== Footer (same as home) ===== */
+        .footer {
+            background: #12152b;
+            color: rgba(255,255,255,0.6);
+            padding: 56px 0 32px;
+            font-size: 14px;
+        }
+        .footer .container { max-width: 1140px; }
+        .footer .cols {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 32px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .footer .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 19px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .footer h5 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+        .footer ul { list-style: none; }
+        .footer ul li { margin-bottom: 8px; }
+        .footer ul a { color: rgba(255,255,255,0.6); transition: color 0.2s; }
+        .footer ul a:hover { color: #fff; }
+        .footer .copyright {
+            text-align: center;
+            padding-top: 22px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .page-header { padding: 130px 0 44px; }
+            .page-header h1 { font-size: 28px; }
+            .policy .card { padding: 32px 24px; }
+            .navbar-toggler { display: block; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 64px; left: 0; right: 0;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                background: rgba(13,16,35,0.98);
+                padding: 12px 24px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+            }
+            .nav-links.open { display: flex; }
+            .nav-links .nav-item { padding: 10px 0; }
+            .nav-links .btn-login { justify-content: center; margin-top: 8px; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a class="logo" href="/"><span class="globe">🌐</span>ToWorld</a>
+            <button class="navbar-toggler" type="button" aria-label="Toggle navigation" onclick="document.getElementById('navLinks').classList.toggle('open')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a class="nav-item" href="/">Home</a>
+                <a class="nav-item" href="/download.html">Download</a>
+                <a class="btn-login" href="/panel.html" data-invite>Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Privacy Policy</h1>
+        <p>ToWorld Privacy Policy — We are committed to protecting your personal information and privacy with the utmost prudence and responsibility.</p>
+    </header>
+
+    <!-- Policy Body -->
+    <section class="policy">
+        <div class="container">
+            <div class="card">
+                <p class="meta">Last Updated: January 1, 2018</p>
+                <p class="meta">Effective Date: January 1, 2018</p>
+
+                <div class="intro">
+                    <h2>Introduction</h2>
+                    <p>ToWorld ("we", "us", or "our") provides a global network relay service. We understand how important your personal information is to you, and we are committed to protecting it with the highest standards of care and responsibility. We maintain a strict <b>no-logs policy</b> to protect your privacy. Please read this Privacy Policy carefully before using our services.</p>
+                    <p>By registering for or using our services, you acknowledge that you have read and agree to this Privacy Policy. If you do not agree with any part of this policy, please do not register for or use our services.</p>
+                </div>
+
+                <h2>1. Information We Collect</h2>
+                <h3>1.1 Information You Provide Directly</h3>
+                <ul>
+                    <li><b>Account Information</b>: Your email address, username, and encrypted password provided during registration. If you register using an invitation code, we collect the code solely for referral and promotional purposes.</li>
+                    <li><b>Order and Payment Information</b>: When you purchase a service plan, we record the plan, order amount, payment method, and transaction time in order to activate your service and maintain records. <b>We do NOT collect or store sensitive payment credentials such as bank card numbers or payment account passwords</b> — such information is collected and processed directly by the third-party payment service provider you choose.</li>
+                    <li><b>Support and Contact Information</b>: When you contact us through our ticket system or other support channels, we collect the contact details and the content of your inquiry for the purpose of providing technical support and after-sales service.</li>
+                </ul>
+
+                <h3>1.2 Information We Collect Automatically</h3>
+                <ul>
+                    <li><b>Account and Usage Information</b>: Your plan type, data usage, and node subscription information, used to provide and maintain the relay service, and to perform traffic quota management and billing.</li>
+                    <li><b>Device and Technical Information</b>: When you access our user panel, we may automatically collect your IP address, browser type and version, operating system, and access time to ensure service security, detect abnormal access, and improve the product experience.</li>
+                    <li><b>Cookies and Local Storage</b>: Please see Section 5 below.</li>
+                </ul>
+
+                <h3>1.3 Information We Do NOT Collect</h3>
+                <p>We operate a strict <b>no-logs policy</b>. We do not record any of the following regarding your use of the relay service:</p>
+                <ul>
+                    <li>Websites you visit, your browsing history or records</li>
+                    <li>Your DNS queries</li>
+                    <li>The content of your traffic, communications, or files</li>
+                    <li>The start/end times of sessions or the mapping between source/destination IP addresses</li>
+                </ul>
+                <p>We cannot — and have no intention to — disclose such information to any third party.</p>
+
+                <h2>2. How We Use Your Information</h2>
+                <p>We use the information we collect solely for the following legitimate and necessary purposes:</p>
+                <ul>
+                    <li>To create and manage your account and verify your identity;</li>
+                    <li>To provide the relay service, and to perform traffic statistics, quota management, and billing;</li>
+                    <li>To process your orders, refunds, and after-sales requests;</li>
+                    <li>To respond to your inquiries and provide technical support through the ticket system;</li>
+                    <li>To safeguard service security and detect, prevent, and mitigate fraud and abuse;</li>
+                    <li>To improve our products and services and optimize your user experience;</li>
+                    <li>To fulfill our obligations under applicable laws and regulations.</li>
+                </ul>
+                <p>We do not use your personal information for purposes not described in this policy, or beyond the scope described herein. If we need to use your information for other purposes, we will seek your consent again.</p>
+
+                <h2>3. Sharing and Disclosure of Information</h2>
+                <p>We do not sell, rent, or otherwise transfer your personal information to any third party, except in the following circumstances:</p>
+                <ul>
+                    <li><b>Payment Service Providers</b>: To complete a transaction, we may share order information necessary for the transaction with third-party payment platforms. Their collection and use of your payment information is governed by their own privacy policies;</li>
+                    <li><b>Infrastructure Providers</b>: Our services are hosted on servers operated by cloud service and content delivery network (CDN) providers such as Cloudflare. These providers may access technical information necessary for infrastructure operations, but are not permitted to use it for any other purpose;</li>
+                    <li><b>Legal Requirements</b>: We may disclose your information when we believe in good faith that it is necessary to comply with applicable laws, court orders, or governmental regulations, to the extent permitted by law;</li>
+                    <li><b>With Your Explicit Consent</b>: In any other circumstance with your explicit consent.</li>
+                </ul>
+
+                <h2>4. Storage and Security of Information</h2>
+                <h3>4.1 Storage Location and Retention</h3>
+                <p>Your personal information is stored on servers under our control or those of our service providers. We retain your personal information only for as long as necessary to fulfill the purposes described in this policy, unless a longer retention period is required or permitted by law. After you request account deletion or we delete your information in accordance with this policy, we will delete or anonymize your personal information within a reasonable period.</p>
+                <h3>4.2 Security Measures</h3>
+                <p>We employ industry-standard security measures to protect your personal information, including but not limited to:</p>
+                <ul>
+                    <li>Encrypting passwords; plaintext passwords are never stored;</li>
+                    <li>Transmitting your data over HTTPS encryption;</li>
+                    <li>Implementing access controls so that only authorized personnel can access your information on a need-to-know basis;</li>
+                    <li>Periodically assessing and reviewing our security protections.</li>
+                </ul>
+                <p>While we take reasonable measures to protect your information, no method of transmission or storage over the internet can guarantee absolute security. In the event of a personal information security incident, we will notify you in accordance with applicable laws of the nature of the incident, its likely impact, and the measures we have taken or will take, and will report to the relevant authorities as appropriate.</p>
+
+                <h2>5. Cookies and Local Storage</h2>
+                <p>When you access and use our user panel, we may use cookies and browser local storage technologies (such as localStorage and sessionStorage) to:</p>
+                <ul>
+                    <li>Keep you signed in so you do not need to log in repeatedly;</li>
+                    <li>Record your preferences (such as language and theme);</li>
+                    <li>Retain your invitation code to complete the registration flow;</li>
+                    <li>Support service security and anti-abuse purposes.</li>
+                </ul>
+                <p>You may manage or delete cookies and local storage data through your browser settings. Please note, however, that some features may depend on these technologies; disabling them may affect your experience.</p>
+
+                <h2>6. Your Rights</h2>
+                <p>Under applicable laws, you have the following rights with respect to your personal information:</p>
+                <ul>
+                    <li><b>Right of Access</b>: You can view your basic account information and usage data in your personal center;</li>
+                    <li><b>Right of Rectification</b>: If your personal information is inaccurate or incomplete, you may correct it yourself or contact us to have it corrected;</li>
+                    <li><b>Right of Erasure</b>: You may delete your account at any time from your personal center. After deletion, we will remove your personal information within a reasonable period;</li>
+                    <li><b>Right to Withdraw Consent</b>: For processing based on your consent, you may withdraw your consent at any time;</li>
+                    <li><b>Right to Complain</b>: You have the right to lodge a complaint with the relevant supervisory authority.</li>
+                </ul>
+                <p>To exercise any of the rights above, or if you have any questions about this policy, please contact us using the information in Section 8. We will respond to your request within a reasonable period (typically within 15 business days).</p>
+
+                <h2>7. Updates to This Policy</h2>
+                <p>We may update this policy from time to time. When significant changes are made, we will post the updated policy on our website and update the "Last Updated" date at the top of this policy. Significant changes include, but are not limited to, material changes in how we collect and use personal information, or a change in the controller of your personal information. The revised policy takes effect upon posting. Your continued use of our services after the policy is updated constitutes your acceptance of the revised policy.</p>
+
+                <h2>8. Contact Us</h2>
+                <p>If you have any questions, comments, or suggestions regarding this policy or our privacy practices, please contact us at:</p>
+                <div class="note">📬 Official Website: <a href="https://go2world.uk" target="_blank" rel="noopener">https://go2world.uk</a></div>
+                <p>We will respond to your request as soon as possible and resolve your concern within a reasonable period (typically within 15 business days).</p>
+                <p>Thank you for trusting ToWorld. We are committed to protecting your personal information and privacy with the utmost prudence and responsibility.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="cols">
+                <div>
+                    <a class="logo" href="/"><span>🌐</span>ToWorld</a>
+                    <p>Committed to providing users with high-speed, stable, and cost-effective network relay services; experience access speeds as if you were overseas, on any device and network.</p>
+                </div>
+                <div>
+                    <h5>Navigation</h5>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/download.html">Download</a></li>
+                        <li><a href="/panel.html" data-invite>Sign In / Register</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="https://go2world.uk" target="_blank" rel="noopener">Contact Us</a></li>
+                        <li><a href="/panel.html#/ticket">Ticket System</a></li>
+                        <li><a href="/panel.html#/user">Account</a></li>
+                        <li><a href="/privacy_en.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">© ToWorld · Powered by ToWorld</div>
+        </div>
+    </footer>
+
+    <script>
+        // Invitation code capture: preserve ?code= or hash #/register?code= when redirecting to the panel
+        (function () {
+            var code = '';
+            var m = location.search.match(/[?&]code=([^&]+)/);
+            var h = location.hash.match(/[?&]code=([^&]+)/);
+            if (m && m[1]) {
+                code = decodeURIComponent(m[1]);
+            } else if (h && h[1]) {
+                code = decodeURIComponent(h[1]);
+            } else {
+                try { code = sessionStorage.getItem('invite_code') || ''; } catch (e) {}
+            }
+            if (!code) return;
+            try { sessionStorage.setItem('invite_code', code); } catch (e) {}
+            var links = document.querySelectorAll('a[data-invite]');
+            for (var i = 0; i < links.length; i++) {
+                links[i].href = '/panel.html#/register?code=' + encodeURIComponent(code);
+            }
+        })();
+    </script>
+</body>
+
+</html>

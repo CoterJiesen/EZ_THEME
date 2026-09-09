@@ -6,6 +6,8 @@
     "dev": "vite",
     "serve": "vite",
     "build": "vite build",
+    "build:cdn": "vite build --mode production",
+    "upload:cdn": "echo '请配置你的 CDN 上传命令，例如：qshell qupload dist/ <bucket>'",
     "test": "vitest run"
   },
   "keywords": [],

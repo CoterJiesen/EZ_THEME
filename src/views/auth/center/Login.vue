@@ -320,11 +320,11 @@ export default {
 
 
 
-    const logoPath = ref('./images/logo.png');
+    const logoPath = ref(`${process.env.BASE_URL}images/logo.png`);
 
     const handleLogoError = () => {
 
-      logoPath.value = '/images/logo.png';
+      logoPath.value = `${process.env.BASE_URL}images/logo.png`;
 
     };
 

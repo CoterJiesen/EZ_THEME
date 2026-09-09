@@ -1,5 +1,5 @@
-# EZ THEME
-EZ THEME: A theme for V2Board / wyxBoard / XBoard
+# To World
+To World: A theme for V2Board / wyxBoard / XBoard
 
 TAG: V2B 主题 \ V2B 开源主题 \ XB 主题 \ 主题 \ 面板美化包 \ V2Board 主题
 
@@ -77,6 +77,47 @@ npm run build
 ### 主题配置
 
 主题颜色、API和其他配置可以在 `src/config` 下文件中修改。
+
+## CDN 静态资源加速
+
+项目支持通过 `VITE_CDN_URL` 环境变量一键配置 CDN 静态资源加速，将 JS/CSS/图片/字体等静态资源托管到 CDN 上，提升加载速度。
+
+### 使用方式
+
+1. 在 `.env.production` 中配置 CDN 地址：
+
+```bash
+VITE_CDN_URL = https://cdn.example.com/ez-theme/
+```
+
+2. 正常构建：
+
+```bash
+npm run build
+```
+
+构建后，`dist/index.html` 中的所有静态资源引用会自动替换为 CDN 地址。
+
+### 部署步骤
+
+1. **源站部署**：将 `dist/` 下所有文件部署到你的源站服务器
+2. **CDN 上传**：将以下目录上传到 CDN 存储桶：
+   - `dist/static/` — JS/CSS/字体等构建产物
+   - `dist/images/` — 图片资源
+3. **注意**：`index.html` 和运行时配置文件（随机名 `.js`）**不要上传到 CDN**，留在源站即可，方便配置热更新
+
+### 主流 CDN 上传工具参考
+
+| CDN 服务商 | 上传工具 | 示例命令 |
+|-----------|---------|---------|
+| 七牛云 | qshell | `qshell qupload dist/ <bucket>` |
+| 又拍云 | upx | `upx upload dist/ /` |
+| 阿里云 OSS | ossutil | `ossutil cp -r dist/static/ oss://<bucket>/static/` |
+| Cloudflare R2 | rclone/Wrangler | `wrangler r2 object put <bucket>/static/ --file dist/static/` |
+
+### 回退到源站模式
+
+注释或删除 `.env.production` 中的 `VITE_CDN_URL` 配置，重新构建即可恢复为相对路径模式。
 
 ## 浏览器支持
 

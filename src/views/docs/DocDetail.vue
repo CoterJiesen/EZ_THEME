@@ -302,7 +302,7 @@ const processTemplateVariables = (content) => {
 
   const subscribeUrl = getUserSubscribeUrl();
 
-  const siteName = SITE_CONFIG.siteName || 'EZ THEME';
+  const siteName = SITE_CONFIG.siteName || 'To World';
 
   const safeBase64SubscribeUrl = safeBase64Encode(subscribeUrl);
 

@@ -4,7 +4,7 @@
     <div class="static-layout" v-if="$route.meta.requiresAuth">
       <!-- 网站名称 -->
       <div class="site-logo">
-        <img v-if="siteConfig.showLogo" src="/images/logo.png" alt="Logo" class="site-logo-img" />
+        <img v-if="siteConfig.showLogo" :src="`${baseUrl}images/logo.png`" alt="Logo" class="site-logo-img" />
         {{ siteConfig.siteName }}
       </div>
       
@@ -250,13 +250,16 @@ export default {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     });
     
+    const baseUrl = process.env.BASE_URL;
+
     return {
       username,
       avatarUrl,
       siteConfig,
       PROFILE_CONFIG,
       cachedRoutes,
-      customerServiceConfig
+      customerServiceConfig,
+      baseUrl
     };
   }
 };
