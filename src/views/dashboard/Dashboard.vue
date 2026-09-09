@@ -454,6 +454,93 @@
         </div>
       </transition>
 
+      <!-- 客户端下载详情弹窗 -->
+      <transition name="fade">
+        <div v-if="showDownloadModal" class="download-modal-overlay" @click="closeDownloadModal">
+          <div class="download-modal" @click.stop>
+            <div class="download-modal-header">
+              <h3>{{ getDownloadPlatformLabel(activeDownloadPlatform) }}</h3>
+              <button class="close-btn" @click="closeDownloadModal">
+                <span class="close-icon"></span>
+              </button>
+            </div>
+            <div class="download-modal-body">
+              <!-- iOS 引导 -->
+              <template v-if="activeDownloadPlatform === 'ios'">
+                <div class="ios-guide">
+                  <div class="guide-icon">
+                    <IconBrandApple :size="48"/>
+                  </div>
+                  <p class="guide-text">需要非中国大陆区 Apple ID，部分地区 App Store 不支持下载。</p>
+                  <p class="guide-text-sub">请使用其他国家或地区 Apple ID 账号下载。请登录网站，查看使用文档部分。</p>
+                  <a :href="clientConfig.clientLinks?.ios || '#'" target="_blank" rel="noopener noreferrer"
+                     class="btn-primary download-btn-main"
+                     :class="{ 'btn-disabled': !clientConfig.clientLinks?.ios || clientConfig.clientLinks.ios.includes('xxx') }">
+                    <IconBrandApple :size="16"/>
+                    <span>App Store 下载</span>
+                  </a>
+                </div>
+              </template>
+
+              <!-- 其他平台 -->
+              <template v-else>
+                <div class="download-version" v-if="latestVersion">
+                  <span class="version-label">当前最新版本</span>
+                  <span class="version-value">{{ latestVersion }}</span>
+                </div>
+
+                <div class="download-buttons">
+                  <a :href="getPrimaryUrl(activeDownloadPlatform)" target="_blank" rel="noopener noreferrer"
+                     class="btn-primary download-btn-main">
+                    <IconDownload :size="16"/>
+                    <span>⬇ 下载客户端</span>
+                  </a>
+                  <a v-if="hasMirrorUrl(activeDownloadPlatform)"
+                     :href="getMirrorUrl(activeDownloadPlatform)" target="_blank" rel="noopener noreferrer"
+                     class="btn-outline download-btn-mirror">
+                    备用下载
+                  </a>
+                </div>
+
+                <!-- Windows 额外运行库 -->
+                <div v-if="activeDownloadPlatform === 'windows'" class="download-extra">
+                  <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" target="_blank" rel="noopener noreferrer"
+                     class="btn-outline vc-redist-btn"
+                     title="如果客户端无法运行，请先安装此依赖库">
+                    🧩 VC++ 运行库下载
+                  </a>
+                </div>
+
+                <!-- 其他版本 -->
+                <details class="other-versions" v-if="getPlatformAssets(activeDownloadPlatform).length > 1">
+                  <summary>其他版本</summary>
+                  <ul class="version-list">
+                    <li v-for="asset in getPlatformAssets(activeDownloadPlatform)" :key="asset.id">
+                      <a :href="getAssetMirror0(asset)" target="_blank" rel="noopener noreferrer">
+                        <span class="asset-name">{{ formatAssetName(asset.name) }}</span>
+                        <span class="asset-size">({{ formatAssetSize(asset.size) }})</span>
+                      </a>
+                      <span class="asset-mirrors">
+                        <a :href="getAssetMirror1(asset)" target="_blank" rel="noopener noreferrer">备用2</a>
+                      </span>
+                    </li>
+                  </ul>
+                </details>
+
+                <!-- 无数据兜底 -->
+                <div v-if="!releaseData && !releaseLoading" class="download-fallback">
+                  <p class="fallback-text">无法获取最新版本，正在使用官方下载链接</p>
+                  <a :href="clientConfig.clientLinks?.[activeDownloadPlatform] || '#'" target="_blank" rel="noopener noreferrer"
+                     class="btn-outline">
+                    前往官方下载
+                  </a>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </transition>
+
       <div class="stats-grid">
         <template v-if="loading.userStats">
           <AppCard v-for="i in 4" :key="i" class="stats-card skeleton-card" variant="stats" no-padding>
@@ -575,45 +662,47 @@
            v-if="clientConfig.showDownloadCard" style="animation-delay: 0.9s" hoverable no-padding>
         <div class="card-header">
           <h2 class="card-title">{{ $t('dashboard.officialClients') }}</h2>
+          <span v-if="latestVersion" class="version-badge">{{ latestVersion }}</span>
+          <span v-else-if="releaseLoading" class="version-badge version-loading">…</span>
         </div>
         <div class="card-body">
           <div class="download-options">
-            <div class="download-option" v-if="clientConfig.showIOS" @click="downloadClient('ios')">
+            <div class="download-option" v-if="clientConfig.showIOS" @click="openDownloadModal('ios')">
               <div class="option-icon ios">
                 <IconBrandApple :size="32"/>
               </div>
               <div class="option-name">iOS</div>
             </div>
 
-            <div class="download-option" v-if="clientConfig.showAndroid" @click="downloadClient('android')">
+            <div class="download-option" v-if="clientConfig.showAndroid" @click="openDownloadModal('android')">
               <div class="option-icon android">
                 <IconBrandAndroid :size="32"/>
               </div>
               <div class="option-name">Android</div>
             </div>
 
-            <div class="download-option" v-if="clientConfig.showMacOS" @click="downloadClient('macos')">
+            <div class="download-option" v-if="clientConfig.showMacOS" @click="openDownloadModal('macos')">
               <div class="option-icon macos">
                 <IconBrandFinder :size="32"/>
               </div>
-              <div class="option-name">MacOS</div>
+              <div class="option-name">macOS</div>
             </div>
 
-            <div class="download-option" v-if="clientConfig.showWindows" @click="downloadClient('windows')">
+            <div class="download-option" v-if="clientConfig.showWindows" @click="openDownloadModal('windows')">
               <div class="option-icon windows">
                 <IconBrandWindows :size="32"/>
               </div>
               <div class="option-name">Windows</div>
             </div>
 
-            <div class="download-option" v-if="clientConfig.showLinux" @click="downloadClient('linux')">
+            <div class="download-option" v-if="clientConfig.showLinux" @click="openDownloadModal('linux')">
               <div class="option-icon linux">
                 <IconBrandDebian :size="32"/>
               </div>
               <div class="option-name">Linux</div>
             </div>
 
-            <div class="download-option" v-if="clientConfig.showOpenWrt" @click="downloadClient('openwrt')">
+            <div class="download-option" v-if="clientConfig.showOpenWrt" @click="openDownloadModal('openwrt')">
               <div class="option-icon openwrt">
                 <IconRouter :size="32"/>
               </div>
@@ -700,6 +789,7 @@ import {
 import {useRouter} from 'vue-router';
 import {useI18n} from 'vue-i18n';
 import {CLIENT_CONFIG, DASHBOARD_CONFIG, isXiaoV2board, SITE_CONFIG} from '@/utils/baseConfig';
+import {useClientReleases} from '@/composables/useClientReleases';
 import {
   IconAlertTriangle,
   IconBox,
@@ -717,6 +807,7 @@ import {
   IconCopy,
   IconCrosshair,
   IconDeviceDesktop,
+  IconDownload,
   IconEye,
   IconEyeOff,
   IconFileText,
@@ -846,6 +937,7 @@ export default {
     IconWaveSine,
     IconDeviceDesktop,
     IconCrosshair,
+    IconDownload,
     IconPackage,
     IconMoon,
     IconWaveSawTool,
@@ -867,6 +959,21 @@ export default {
     const {t, locale} = useI18n();
     const router = useRouter();
     const clientConfig = reactive(CLIENT_CONFIG);
+    const {
+      releaseData: releaseDataRef,
+      loading: releaseLoadingRef,
+      loadRelease,
+      getPrimaryAsset,
+      getAllAssets,
+      getTag,
+      getPrimaryDownloadUrl,
+      getMirrorDownloadUrl,
+      prettyName,
+      formatSize,
+      mirrorUrls
+    } = useClientReleases();
+    const releaseData = releaseDataRef;
+    const releaseLoading = releaseLoadingRef;
     const notices = ref([]);
     const autoRotateNotices = ref(true);
     const userPlan = ref({
@@ -994,6 +1101,85 @@ export default {
       const downloadUrl = clientConfig.clientLinks[platform];
       if (downloadUrl) {
         window.open(downloadUrl, '_blank');
+      }
+    };
+
+    // ====== 客户端下载弹窗相关 ======
+    const showDownloadModal = ref(false);
+    const activeDownloadPlatform = ref('');
+
+    const latestVersion = computed(() => {
+      return getTag();
+    });
+
+    const platformLabels = {
+      ios: 'iOS 客户端',
+      android: 'Android 客户端',
+      macos: 'macOS 客户端',
+      windows: 'Windows 客户端',
+      linux: 'Linux 客户端',
+      openwrt: 'OpenWrt 客户端'
+    };
+
+    const getDownloadPlatformLabel = (platform) => {
+      return platformLabels[platform] || platform;
+    };
+
+    const openDownloadModal = async (platform) => {
+      activeDownloadPlatform.value = platform;
+      showDownloadModal.value = true;
+      // 如果还没有数据，尝试加载
+      if (!releaseData.value && !releaseLoading.value) {
+        try {
+          await loadRelease();
+        } catch (e) {
+          // 失败静默，使用兜底链接
+        }
+      }
+    };
+
+    const closeDownloadModal = () => {
+      showDownloadModal.value = false;
+    };
+
+    const getPrimaryUrl = (platform) => {
+      const url = getPrimaryDownloadUrl(platform);
+      if (url) return url;
+      // 兜底：使用配置中的静态链接
+      return clientConfig.clientLinks?.[platform] || '#';
+    };
+
+    const getMirrorUrl = (platform) => {
+      return getMirrorDownloadUrl(platform) || '';
+    };
+
+    const hasMirrorUrl = (platform) => {
+      return !!getMirrorDownloadUrl(platform);
+    };
+
+    const getPlatformAssets = (platform) => {
+      return getAllAssets(platform) || [];
+    };
+
+    const formatAssetName = (name) => prettyName(name);
+    const formatAssetSize = (size) => formatSize(size);
+
+    const getAssetMirror0 = (asset) => {
+      const urls = mirrorUrls(asset.browser_download_url);
+      return urls[0] || asset.browser_download_url;
+    };
+
+    const getAssetMirror1 = (asset) => {
+      const urls = mirrorUrls(asset.browser_download_url);
+      return urls[1] || asset.browser_download_url;
+    };
+
+    // 加载 release 数据（在 onMounted 中调用）
+    const initReleaseData = async () => {
+      try {
+        await loadRelease();
+      } catch (e) {
+        // 静默失败，使用兜底链接
       }
     };
 
@@ -1657,6 +1843,11 @@ export default {
       fetchUserStats();
 
       updateQRCodeUrl();
+
+      // 加载客户端 release 数据（失败不影响主流程）
+      if (clientConfig.showDownloadCard) {
+        initReleaseData();
+      }
     });
 
     watch(() => userPlan.value.subscribeUrl, () => {
@@ -1811,6 +2002,24 @@ export default {
       goToShop,
       openDocumentation,
       downloadClient,
+      // 下载弹窗相关
+      showDownloadModal,
+      activeDownloadPlatform,
+      latestVersion,
+      releaseLoading,
+      releaseData,
+      openDownloadModal,
+      closeDownloadModal,
+      getDownloadPlatformLabel,
+      getPrimaryUrl,
+      getMirrorUrl,
+      hasMirrorUrl,
+      getPlatformAssets,
+      formatAssetName,
+      formatAssetSize,
+      getAssetMirror0,
+      getAssetMirror1,
+      IconDownload,
       hasPendingItems,
       router,
       currentNoticeIndex,
@@ -2251,8 +2460,18 @@ export default {
         }
       }
     }
-  }
 
+    .version-badge {
+      font-size: 12px;
+      color: var(--secondary-text-color);
+      opacity: 0.7;
+      font-weight: 400;
+
+      &.version-loading {
+        opacity: 0.4;
+      }
+    }
+  }
 
   .notice-card {
     margin-bottom: 24px;
@@ -2425,6 +2644,255 @@ export default {
         color: var(--theme-color);
       }
     }
+  }
+}
+
+// ====== 下载详情弹窗（全局浮层） ======
+.download-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.download-modal {
+  background-color: var(--card-background);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--card-border-color);
+  width: 90%;
+  max-width: 420px;
+  overflow: hidden;
+  animation: download-modal-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes download-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.download-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: rgba(var(--theme-color-rgb), 0.03);
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-color);
+    font-weight: 600;
+  }
+}
+
+.download-modal-body {
+  padding: 24px 20px;
+  background: linear-gradient(to bottom, rgba(var(--theme-color-rgb), 0.02), transparent);
+}
+
+// 版本号显示
+.download-version {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  .version-label {
+    font-size: 13px;
+    color: var(--secondary-text-color);
+  }
+
+  .version-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--theme-color);
+  }
+}
+
+// 下载按钮组
+.download-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+
+  .download-btn-main {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .download-btn-mirror {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+// 额外链接（VC++运行库等）
+.download-extra {
+  margin-bottom: 16px;
+  text-align: center;
+
+  .vc-redist-btn {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+}
+
+// 其他版本折叠
+.other-versions {
+  margin-top: 16px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--theme-color);
+    font-weight: 500;
+    padding: 6px 0;
+    user-select: none;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .version-list {
+    list-style: none;
+    padding: 8px 0 0;
+    margin: 0;
+    max-height: 240px;
+    overflow-y: auto;
+
+    li {
+      padding: 4px 0;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-color);
+      text-decoration: none;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(var(--theme-color-rgb), 0.06);
+        color: var(--theme-color);
+      }
+    }
+
+    .asset-name {
+      flex: 1;
+    }
+
+    .asset-size {
+      color: var(--secondary-text-color);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    .asset-mirrors {
+      display: flex;
+      gap: 6px;
+      padding: 0 10px 4px;
+
+      a {
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        background-color: rgba(var(--theme-color-rgb), 0.08);
+        color: var(--theme-color);
+      }
+    }
+  }
+}
+
+// iOS 引导
+.ios-guide {
+  text-align: center;
+
+  .guide-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background-color: rgba(0, 122, 255, 0.1);
+    color: #007aff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .guide-text {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .guide-text-sub {
+    font-size: 13px;
+    color: var(--secondary-text-color);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .download-btn-main {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+
+    &.btn-disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// 兜底提示
+.download-fallback {
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+
+  .fallback-text {
+    font-size: 12px;
+    color: var(--secondary-text-color);
+    margin-bottom: 10px;
   }
 }
 
