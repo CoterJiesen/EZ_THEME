@@ -1,5 +1,5 @@
-# To World
-To World: A theme for V2Board / wyxBoard / XBoard
+# 达世界
+达世界: A theme for V2Board / wyxBoard / XBoard
 
 TAG: V2B 主题 \ V2B 开源主题 \ XB 主题 \ 主题 \ 面板美化包 \ V2Board 主题
 

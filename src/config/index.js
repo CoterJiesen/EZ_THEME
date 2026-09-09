@@ -66,10 +66,10 @@ export const config  = {
 
     // ====================  网站基础配置  ====================
     SITE_CONFIG: {
-        siteName: 'To World',
+        siteName: '达世界',
         siteDescription: '达世界 UI',
         // copyright会自动使用当前年份
-        copyright: `© ${new Date().getFullYear()} To World. All Rights Reserved.`,
+        copyright: `© ${new Date().getFullYear()} 达世界. All Rights Reserved.`,
 
         // 是否显示标题中的网站Logo (true=显示, false=隐藏)
         showLogo: true,

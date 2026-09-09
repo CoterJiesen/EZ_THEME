@@ -198,9 +198,9 @@ export const CUSTOM_HEADERS_CONFIG = mergeDeep(DEFAULT_CUSTOM_HEADERS_CONFIG, ge
 
 // 网站名称配置
 const DEFAULT_SITE_CONFIG = {
-    siteName: 'To World',
+    siteName: '达世界',
     siteDescription: '达世界 UI',
-    copyright: `© ${new Date().getFullYear()} To World. All Rights Reserved.`,
+    copyright: `© ${new Date().getFullYear()} 达世界. All Rights Reserved.`,
 
     // 是否显示标题中的网站Logo (true=显示, false=隐藏)
     showLogo: true,
