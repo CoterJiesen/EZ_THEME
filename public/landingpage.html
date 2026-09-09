@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="icon" href="./images/logo.png">
-  <title>EZ</title>
+  <title>达世界</title>
   <!-- 动态设置网站标题 -->
   <script>
     document.write('<script src="config.js?t=' + Math.random() + '"><\/script>');
@@ -504,7 +504,154 @@
     .client-card p {
       font-size: 14px;
       color: var(--text-light);
-      margin-bottom: 20px;
+      margin-bottom: 8px;
+    }
+
+    .client-subnote {
+      font-size: 13px;
+      color: var(--text-light);
+      opacity: 0.8;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .client-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .client-actions .button {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+
+    .client-secondary-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .outline-button {
+      background-color: transparent;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      font-size: 13px;
+      padding: 8px 14px;
+    }
+
+    .outline-button:hover {
+      background-color: rgba(var(--primary-rgb), 0.08);
+    }
+
+    .version-line {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    /* 其他版本下拉 */
+    .variants {
+      position: relative;
+      display: inline-block;
+    }
+
+    .client-secondary-actions .variants {
+      display: inline-flex;
+    }
+
+    .variants summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--primary-color);
+      background-color: rgba(var(--primary-rgb), 0.08);
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+
+    .variants summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .variants summary:hover {
+      background-color: rgba(var(--primary-rgb), 0.15);
+    }
+
+    .variants ul {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      min-width: 260px;
+      max-height: 280px;
+      overflow-y: auto;
+      background-color: var(--background-color);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      list-style: none;
+      padding: 6px;
+      margin: 0;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    :root.dark-theme .variants ul {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .variants li {
+      list-style: none;
+    }
+
+    .variants a {
+      display: block;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-color);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .variants a:hover {
+      background-color: rgba(var(--primary-rgb), 0.08);
+      color: var(--primary-color);
+    }
+
+    .variants .size {
+      color: var(--text-light);
+      font-size: 12px;
+      margin-left: 6px;
+      opacity: 0.8;
+    }
+
+    .variants .mirrors {
+      display: flex;
+      gap: 6px;
+      padding: 2px 12px 8px;
+    }
+
+    .variants .mirrors a {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      background-color: rgba(var(--primary-rgb), 0.08);
+      color: var(--primary-color);
+    }
+
+    .variants .mirrors a:hover {
+      background-color: rgba(var(--primary-rgb), 0.15);
     }
 
     .cta {
@@ -825,6 +972,8 @@
       }
     }
   </style>
+  <!-- 共通客户端 release 工具（由 vite 插件从 src/utils/clientRelease.js 生成 IIFE 版本） -->
+  <script src="./static/ClientRelease.js"></script>
 </head>
 <body>
   <!-- 加载动画 -->
@@ -850,7 +999,7 @@
   <header>
     <div class="logo">
       <img src="./images/logo.png" alt="Logo">
-      <h1 id="siteName">EZ</h1>
+      <h1 id="siteName">达世界</h1>
     </div>
     <nav class="nav-links">
       <a href="#features">特性</a>
@@ -910,7 +1059,6 @@
       <a href="javascript:void(0)" onclick="navigateTo('register')" class="button primary-button">立即开始</a>
       <a href="#download" class="button secondary-button">下载客户端</a>
     </div>
-    <img src="https://placehold.co/1200x675" alt="Dashboard Preview" class="hero-image">
   </section>
 
   <section class="features" id="features">
@@ -990,13 +1138,17 @@
     <div class="section-title">
       <h3>跨平台客户端</h3>
       <p>支持各大主流平台，随时随地畅享极速体验</p>
+      <p class="version-line" id="versionLine">正在获取最新版本…</p>
     </div>
     <div class="client-grid">
       <div class="client-card" id="iosClient">
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-apple"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.286 7.008c-3.216 0 -4.286 3.23 -4.286 5.92c0 3.229 2.143 8.072 4.286 8.072c1.165 -.05 1.799 -.538 3.214 -.538c1.406 0 1.607 .538 3.214 .538s4.286 -3.229 4.286 -5.381c-.03 -.011 -2.649 -.434 -2.679 -3.23c-.02 -2.335 2.589 -3.179 2.679 -3.228c-1.096 -1.606 -3.162 -2.113 -3.75 -2.153c-1.535 -.12 -3.032 1.077 -3.75 1.077c-.729 0 -2.036 -1.077 -3.214 -1.077z" /><path d="M12 4a2 2 0 0 0 2 -2a2 2 0 0 0 -2 2" /></svg>
         <h4>iOS</h4>
         <p>适用于 iPhone 和 iPad 的客户端</p>
-        <a href="https://apps.apple.com/app/id1" class="button primary-button" target="_blank" rel="noopener noreferrer">下载</a>
+        <p class="client-subnote">需要非中国大陆区 Apple ID，部分地区 App Store 不支持下载。</p>
+        <div class="client-actions">
+          <a href="https://apps.apple.com/app/id1" class="button secondary-button" target="_blank" rel="noopener noreferrer">📖 查看教程</a>
+        </div>
       </div>
       <div class="client-card" id="androidClient">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-brand-android">
@@ -1010,7 +1162,15 @@
         </svg>
         <h4>Android</h4>
         <p>适用于安卓手机和平板的客户端</p>
-        <a href="https://play.google.com/store/apps" class="button primary-button" target="_blank" rel="noopener noreferrer">下载</a>
+        <p class="client-subnote">即刻解锁全球数字内容，畅享无边界的互联网。</p>
+        <div class="client-actions">
+          <a href="https://dwc-1256539025.file.myqcloud.com/clients/android/latest.apk" class="button primary-button" data-platform="android" target="_blank" rel="noopener noreferrer">⬇ 下载 APK</a>
+          <a href="#" class="button secondary-button" data-mirror="android" style="display:none">备用下载</a>
+        </div>
+        <details class="variants">
+          <summary>其他版本</summary>
+          <ul data-variants="android"></ul>
+        </details>
       </div>
       <div class="client-card" id="windowsClient">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-brand-windows">
@@ -1020,16 +1180,35 @@
         </svg>
         <h4>Windows</h4>
         <p>适用于 Windows 系统的客户端</p>
-        <a href="https://github.com/releases/latest" class="button primary-button" target="_blank" rel="noopener noreferrer">下载</a>
+        <p class="client-subnote">如客户端无法运行，请先安装运行库（VC++ Redistributable）。</p>
+        <div class="client-actions">
+          <a href="https://dwc-1256539025.file.myqcloud.com/clients/windows/latest.exe" class="button primary-button" data-platform="windows" target="_blank" rel="noopener noreferrer">⬇ 下载客户端</a>
+          <a href="#" class="button secondary-button" data-mirror="windows" style="display:none">备用下载</a>
+        </div>
+        <div class="client-secondary-actions">
+          <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" class="button outline-button" target="_blank" rel="noopener noreferrer" title="如果客户端无法运行，请先安装此依赖库">🧩 VC++ 运行库</a>
+          <details class="variants">
+            <summary>其他版本</summary>
+            <ul data-variants="windows"></ul>
+          </details>
+        </div>
       </div>
       <div class="client-card" id="macosClient">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-device-laptop">
           <path d="M3 19l18 0"></path>
           <path d="M5 6m0 1a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"></path>
         </svg>
-        <h4>MacOS</h4>
+        <h4>macOS</h4>
         <p>适用于 Mac 电脑的客户端</p>
-        <a href="https://github.com/releases/latest" class="button primary-button" target="_blank" rel="noopener noreferrer">下载</a>
+        <p class="client-subnote">保护您在 iMac 或 MacBook 上的数字足迹。</p>
+        <div class="client-actions">
+          <a href="https://dwc-1256539025.file.myqcloud.com/clients/macos/latest.dmg" class="button primary-button" data-platform="macos" target="_blank" rel="noopener noreferrer">⬇ 下载 DMG</a>
+          <a href="#" class="button secondary-button" data-mirror="macos" style="display:none">备用下载</a>
+        </div>
+        <details class="variants">
+          <summary>其他版本</summary>
+          <ul data-variants="macos"></ul>
+        </details>
       </div>
     </div>
   </section>
@@ -1053,20 +1232,23 @@
       <a href="#">常见问题</a>
       <a href="#">联系我们</a>
     </div>
-    <p class="copyright" id="copyrightText">© 2025 EZ THEME. All Rights Reserved.</p>
+    <p class="copyright" id="copyrightText">© 2025 To World. All Rights Reserved.</p>
   </footer>
 
   <script>
     // 页面加载完成后淡出加载动画
     window.addEventListener('load', function() {
-      setTimeout(function() {
-        document.getElementById('preloader').classList.add('fade-out');
-        // 完全移除，避免遮挡页面交互
+      var preloader = document.getElementById('preloader');
+      if (preloader) {
         setTimeout(function() {
-          document.getElementById('preloader').style.display = 'none';
-        }, 800);
-      }, 500);
-      
+          preloader.classList.add('fade-out');
+          // 完全移除，避免遮挡页面交互
+          setTimeout(function() {
+            preloader.style.display = 'none';
+          }, 800);
+        }, 500);
+      }
+
       // 设置滚动触发动画
       setupScrollAnimations();
     });
@@ -1268,40 +1450,45 @@
         }
         
         // 设置客户端下载链接
-        if (config.CLIENT_CONFIG && config.CLIENT_CONFIG.clientLinks) {
+        if (config.CLIENT_CONFIG) {
           try {
-            const clientLinks = config.CLIENT_CONFIG.clientLinks;
-            
+            const clientLinks = (config.CLIENT_CONFIG.clientLinks) || {};
+
             // 显示/隐藏客户端下载卡片
-            if (!config.CLIENT_CONFIG.showIOS) document.getElementById('iosClient').style.display = 'none';
-            if (!config.CLIENT_CONFIG.showAndroid) document.getElementById('androidClient').style.display = 'none';
-            if (!config.CLIENT_CONFIG.showWindows) document.getElementById('windowsClient').style.display = 'none';
-            if (!config.CLIENT_CONFIG.showMacOS) document.getElementById('macosClient').style.display = 'none';
-            
-            // 设置下载链接
-            const setDownloadLink = (elementId, linkUrl) => {
-              if (!linkUrl) return;
-              
-              document.querySelectorAll(`#${elementId} .button`).forEach(btn => {
-                if (linkUrl && linkUrl !== '#' && linkUrl !== '') {
-                  btn.href = linkUrl;
-                  btn.target = '_blank';
-                  btn.rel = 'noopener noreferrer';
-                  
-                  // 添加点击事件监听器，确保链接正常打开
-                  btn.onclick = function(e) {
-                    e.preventDefault();
-                    window.open(linkUrl, '_blank', 'noopener,noreferrer');
-                  };
-                }
-              });
+            if (config.CLIENT_CONFIG.showIOS === false) document.getElementById('iosClient').style.display = 'none';
+            if (config.CLIENT_CONFIG.showAndroid === false) document.getElementById('androidClient').style.display = 'none';
+            if (config.CLIENT_CONFIG.showWindows === false) document.getElementById('windowsClient').style.display = 'none';
+            if (config.CLIENT_CONFIG.showMacOS === false) document.getElementById('macosClient').style.display = 'none';
+
+            // 设置主下载链接（作为 GitHub 动态获取失败时的兜底）
+            const setPrimaryLink = (platform, linkUrl) => {
+              if (!linkUrl || linkUrl === '#' || linkUrl === '') return;
+              const btn = document.querySelector(`a[data-platform="${platform}"]`);
+              if (btn) {
+                btn.href = linkUrl;
+                btn.target = '_blank';
+                btn.rel = 'noopener noreferrer';
+              }
             };
-            
-            setDownloadLink('iosClient', clientLinks.ios);
-            setDownloadLink('androidClient', clientLinks.android);
-            setDownloadLink('windowsClient', clientLinks.windows);
-            setDownloadLink('macosClient', clientLinks.macos);
-            
+
+            setPrimaryLink('android', clientLinks.android);
+            setPrimaryLink('windows', clientLinks.windows);
+            setPrimaryLink('macos', clientLinks.macos);
+
+            // iOS 使用配置的链接（替换教程按钮为下载按钮，如果配置了链接）
+            const iosBtn = document.querySelector('#iosClient .client-actions .button');
+            if (clientLinks.ios && clientLinks.ios !== '#' && clientLinks.ios !== '') {
+              if (iosBtn) {
+                iosBtn.href = clientLinks.ios;
+                iosBtn.textContent = 'App Store 下载';
+                iosBtn.classList.remove('secondary-button');
+                iosBtn.classList.add('primary-button');
+              }
+              // 如果配置了 iOS 链接，也隐藏 subnote
+              const subnote = document.querySelector('#iosClient .client-subnote');
+              if (subnote) subnote.style.display = 'none';
+            }
+
             // console.log('客户端下载链接已设置:', clientLinks);
           } catch (error) {
             // console.error('设置下载链接时出错:', error);
@@ -1394,22 +1581,99 @@
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        
+
         const targetId = this.getAttribute('href').substring(1);
         if (!targetId) return;
-        
+
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
           window.scrollTo({
             top: targetElement.offsetTop - 80,
             behavior: 'smooth'
           });
-          
+
           // 关闭移动端菜单
           closeMobileMenu();
         }
       });
     });
+
+    // ====== 客户端下载：使用共通的 ClientRelease 工具 ======
+    // （核心逻辑来自 ./js/clientRelease.js，由 src/utils/clientRelease.js 同源生成）
+    (function () {
+      var versionLine = document.getElementById('versionLine');
+      var CR = window.ClientRelease;
+      if (!CR) {
+        if (versionLine) versionLine.textContent = '获取最新版本失败，请稍后重试';
+        return;
+      }
+
+      var clientRelease = CR.clientRelease;
+      var prettyName = CR.prettyName;
+      var fmtSize = CR.formatSize;
+      var mirrorUrls = CR.mirrorUrls;
+
+      function applyRelease(data) {
+        if (versionLine) versionLine.textContent = '当前最新版本 ' + (data.tag_name || '');
+        var PLATFORMS = ['android', 'macos', 'windows'];
+        PLATFORMS.forEach(function (platform) {
+          var list = clientRelease.getAllAssets(platform);
+          var primary = clientRelease.getPrimaryAsset(platform);
+          // 主下载按钮
+          var btn = document.querySelector('a[data-platform="' + platform + '"]');
+          if (primary && btn) btn.href = clientRelease.getPrimaryDownloadUrl(platform);
+          // 备用下载按钮
+          var mirrorBtn = document.querySelector('a[data-mirror="' + platform + '"]');
+          if (primary && mirrorBtn) {
+            mirrorBtn.href = clientRelease.getMirrorDownloadUrl(platform);
+            mirrorBtn.style.display = '';
+          }
+          // 其他版本列表
+          var ul = document.querySelector('ul[data-variants="' + platform + '"]');
+          if (ul && list.length) {
+            ul.innerHTML = list.map(function (a) {
+              var m = mirrorUrls(a.browser_download_url);
+              return '<li><a href="' + m[0] + '" target="_blank" rel="noopener">' +
+                     prettyName(a.name) + '<span class="size">(' + fmtSize(a.size) + ')</span></a>' +
+                     '<span class="mirrors"><a href="' + m[1] + '" target="_blank" rel="noopener">备用2</a></span></li>';
+            }).join('');
+          }
+        });
+      }
+
+      // 如果已经有缓存数据，立即应用
+      if (clientRelease.data) {
+        applyRelease(clientRelease.data);
+      }
+
+      // 加载最新 release
+      clientRelease.load().then(function (data) {
+        applyRelease(data);
+      }).catch(function () {
+        if (versionLine && !clientRelease.data) {
+          versionLine.textContent = '获取最新版本失败，请稍后重试';
+        }
+      });
+    })();
+
+    // 「其他版本」下拉：点击外部区域收起；展开一个时自动收起其他
+    (function () {
+      var variants = document.querySelectorAll('details.variants');
+      variants.forEach(function (d) {
+        d.addEventListener('toggle', function () {
+          if (d.open) {
+            variants.forEach(function (o) {
+              if (o !== d) o.open = false;
+            });
+          }
+        });
+      });
+      document.addEventListener('click', function (e) {
+        variants.forEach(function (d) {
+          if (d.open && !d.contains(e.target)) d.open = false;
+        });
+      });
+    })();
   </script>
 </body>
 </html>
