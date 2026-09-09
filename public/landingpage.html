@@ -1617,7 +1617,6 @@
         if (versionLine) versionLine.textContent = '当前最新版本 ' + (data.tag_name || '');
         var PLATFORMS = ['android', 'macos', 'windows'];
         PLATFORMS.forEach(function (platform) {
-          var list = clientRelease.getAllAssets(platform);
           var primary = clientRelease.getPrimaryAsset(platform);
           // 主下载按钮
           var btn = document.querySelector('a[data-platform="' + platform + '"]');
@@ -1628,15 +1627,20 @@
             mirrorBtn.href = clientRelease.getMirrorDownloadUrl(platform);
             mirrorBtn.style.display = '';
           }
-          // 其他版本列表
+          // 其他版本列表（不含主下载已提供的架构）
+          var others = clientRelease.getOtherAssets(platform);
           var ul = document.querySelector('ul[data-variants="' + platform + '"]');
-          if (ul && list.length) {
-            ul.innerHTML = list.map(function (a) {
+          if (ul && others.length) {
+            ul.innerHTML = others.map(function (a) {
               var m = mirrorUrls(a.browser_download_url);
               return '<li><a href="' + m[0] + '" target="_blank" rel="noopener">' +
                      prettyName(a.name) + '<span class="size">(' + fmtSize(a.size) + ')</span></a>' +
                      '<span class="mirrors"><a href="' + m[1] + '" target="_blank" rel="noopener">备用2</a></span></li>';
             }).join('');
+          } else if (ul) {
+            // 没有其他版本时隐藏整个折叠框
+            var details = ul.closest('details.variants');
+            if (details) details.style.display = 'none';
           }
         });
       }

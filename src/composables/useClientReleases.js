@@ -34,6 +34,10 @@ export function useClientReleases() {
     return clientRelease.getAllAssets(platform);
   }
 
+  function getOtherAssets(platform) {
+    return clientRelease.getOtherAssets(platform);
+  }
+
   function getTag() {
     return clientRelease.tag;
   }
@@ -57,6 +61,7 @@ export function useClientReleases() {
     loadRelease,
     getPrimaryAsset,
     getAllAssets,
+    getOtherAssets,
     getTag,
     getPrimaryDownloadUrl,
     getMirrorDownloadUrl,

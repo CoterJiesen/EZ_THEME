@@ -233,6 +233,17 @@ class ClientReleaseManager {
   }
 
   /**
+   * 获取指定平台除首选架构外的其他 asset
+   * （用于「其他版本」列表，避免与主下载按钮重复）
+   */
+  getOtherAssets(platform) {
+    const primary = this.getPrimaryAsset(platform);
+    const list = assetsOf(this._releaseData, platform);
+    if (!primary) return list;
+    return list.filter(a => a.name !== primary.name);
+  }
+
+  /**
    * 获取指定平台的主下载链接（镜像1）
    */
   getPrimaryDownloadUrl(platform) {

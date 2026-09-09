@@ -512,7 +512,7 @@
                 </div>
 
                 <!-- 其他版本 -->
-                <details class="other-versions" v-if="getPlatformAssets(activeDownloadPlatform).length > 1">
+                <details class="other-versions" v-if="getPlatformAssets(activeDownloadPlatform).length > 0">
                   <summary>其他版本</summary>
                   <ul class="version-list">
                     <li v-for="asset in getPlatformAssets(activeDownloadPlatform)" :key="asset.id">
@@ -964,7 +964,7 @@ export default {
       loading: releaseLoadingRef,
       loadRelease,
       getPrimaryAsset,
-      getAllAssets,
+      getOtherAssets,
       getTag,
       getPrimaryDownloadUrl,
       getMirrorDownloadUrl,
@@ -1158,7 +1158,7 @@ export default {
     };
 
     const getPlatformAssets = (platform) => {
-      return getAllAssets(platform) || [];
+      return getOtherAssets(platform) || [];
     };
 
     const formatAssetName = (name) => prettyName(name);
