@@ -258,6 +258,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       assetsDir: 'static',
+      cssCodeSplit: false,
       sourcemap: false,
       minify: 'terser',
       terserOptions: {
@@ -273,16 +274,12 @@ export default defineConfig(({ mode }) => {
       },
       rollupOptions: {
         output: {
+          experimentalMinChunkSize: 150 * 1024,
           manualChunks(id) {
             if (!id.includes('node_modules')) return undefined;
 
-            // 這些依賴只在特定頁面使用，拆包可降低首屏主包壓力。
+            // 只把体积大、且首屏用不到的图表库单独拆，其余依赖统一归 vendor，减少文件碎片。
             if (id.includes('echarts') || id.includes('chart.js')) return 'charts';
-            if (id.includes('aieditor') || id.includes('markdown-it') || id.includes('marked')) return 'editor-markdown';
-            if (id.includes('qrcode') || id.includes('qrcode.vue') || id.includes('vue3-qrcode')) return 'qrcode';
-            if (id.includes('crisp') || id.includes('shepherd') || id.includes('confetti')) return 'feature-widgets';
-            if (id.includes('@tabler/icons-vue')) return 'icons';
-            if (id.includes('crypto-js') || id.includes('jsencrypt') || id.includes('@originjs/crypto-js-wasm')) return 'crypto';
             return 'vendor';
           }
         }

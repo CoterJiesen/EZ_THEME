@@ -289,6 +289,18 @@ export const config  = {
             openwrt: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest'
         },
 
+        // TestFlight 下载（iOS 因政策无法上架 App Store 时的下载方式）
+        testflight: {
+            // 是否启用 TestFlight 下载入口
+            showTestFlight: true,
+
+            // TestFlight 应用在 App Store 的下载地址（一般无需修改）
+            testFlightAppUrl: 'https://apps.apple.com/app/testflight/id899247664',
+
+            // TestFlight 公开邀请链接
+            testFlightJoinUrl: 'https://testflight.apple.com/join/XbmAsUWT'
+        },
+
         // 订阅导入客户端显示控制 部分面板不支持SingBox导入请您注意检查
 
         // iOS平台

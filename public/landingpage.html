@@ -1145,9 +1145,10 @@
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-apple"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.286 7.008c-3.216 0 -4.286 3.23 -4.286 5.92c0 3.229 2.143 8.072 4.286 8.072c1.165 -.05 1.799 -.538 3.214 -.538c1.406 0 1.607 .538 3.214 .538s4.286 -3.229 4.286 -5.381c-.03 -.011 -2.649 -.434 -2.679 -3.23c-.02 -2.335 2.589 -3.179 2.679 -3.228c-1.096 -1.606 -3.162 -2.113 -3.75 -2.153c-1.535 -.12 -3.032 1.077 -3.75 1.077c-.729 0 -2.036 -1.077 -3.214 -1.077z" /><path d="M12 4a2 2 0 0 0 2 -2a2 2 0 0 0 -2 2" /></svg>
         <h4>iOS</h4>
         <p>适用于 iPhone 和 iPad 的客户端</p>
-        <p class="client-subnote">需要非中国大陆区 Apple ID，部分地区 App Store 不支持下载。</p>
+        <p class="client-subnote">因政策原因 App Store 暂无法下载，请通过 TestFlight 安装。</p>
         <div class="client-actions">
-          <a href="https://apps.apple.com/app/id1" class="button secondary-button" target="_blank" rel="noopener noreferrer">📖 查看教程</a>
+          <a href="./testflight.html" class="button primary-button" data-testflight="1" target="_blank" rel="noopener noreferrer">📦 TestFlight 下载</a>
+          <a href="https://apps.apple.com/app/id1" class="button secondary-button" data-ios-tutorial="1" target="_blank" rel="noopener noreferrer">📖 查看教程</a>
         </div>
       </div>
       <div class="client-card" id="androidClient">
@@ -1476,18 +1477,19 @@
             setPrimaryLink('windows', clientLinks.windows);
             setPrimaryLink('macos', clientLinks.macos);
 
-            // iOS 使用配置的链接（替换教程按钮为下载按钮，如果配置了链接）
-            const iosBtn = document.querySelector('#iosClient .client-actions .button');
+            // iOS：TestFlight 为主入口；App Store 教程链接可用配置覆盖
+            const iosTutorialBtn = document.querySelector('#iosClient a[data-ios-tutorial]');
             if (clientLinks.ios && clientLinks.ios !== '#' && clientLinks.ios !== '') {
-              if (iosBtn) {
-                iosBtn.href = clientLinks.ios;
-                iosBtn.textContent = 'App Store 下载';
-                iosBtn.classList.remove('secondary-button');
-                iosBtn.classList.add('primary-button');
-              }
-              // 如果配置了 iOS 链接，也隐藏 subnote
-              const subnote = document.querySelector('#iosClient .client-subnote');
-              if (subnote) subnote.style.display = 'none';
+              if (iosTutorialBtn) iosTutorialBtn.href = clientLinks.ios;
+            } else if (iosTutorialBtn) {
+              iosTutorialBtn.style.display = 'none';
+            }
+
+            // 支持通过配置关闭 TestFlight 入口
+            const testflight = (config.CLIENT_CONFIG.testflight) || {};
+            if (testflight.showTestFlight === false) {
+              const tfBtn = document.querySelector('#iosClient a[data-testflight]');
+              if (tfBtn) tfBtn.style.display = 'none';
             }
 
             // console.log('客户端下载链接已设置:', clientLinks);
