@@ -157,48 +157,62 @@ ${body.replace(/^/gm, '  ')}
   };
 };
 
-const createRuntimeConfigPlugin = ({ enableConfigJS, enableObfuscation, extraScriptFileName }) => ({
-  name: 'ez-runtime-config',
-  transformIndexHtml(html) {
-    if (!enableConfigJS) {
-      return html.replace('<!--EZ_CONFIG_SCRIPT-->', '');
-    }
-
-    return html.replace('<!--EZ_CONFIG_SCRIPT-->', `<script src="./${extraScriptFileName}"></script>`);
-  },
-  closeBundle() {
-    if (!enableConfigJS) return;
-
+const createRuntimeConfigPlugin = ({ enableConfigJS, enableObfuscation, extraScriptFileName }) => {
+  // 读取 src/config/index.js，转换成 window.EZ_CONFIG = {...} 的独立脚本
+  function buildConfigScript() {
     const configPath = path.resolve(__dirname, 'src/config/index.js');
-    const distPath = path.resolve(__dirname, 'dist', extraScriptFileName);
+    let content = fs.readFileSync(configPath, 'utf-8');
+    content = content.replace(/window\.EZ_CONFIG\s*=\s*config\s*;?/g, '');
+    content = content.replace(/export\s+const\s+config\s*=/, 'window.EZ_CONFIG =');
+    return content;
+  }
 
-    try {
-      let content = fs.readFileSync(configPath, 'utf-8');
-      content = content.replace(/window\.EZ_CONFIG\s*=\s*config\s*;?/g, '');
-      content = content.replace(/export\s+const\s+config\s*=/, 'window.EZ_CONFIG =');
-
-      if (enableObfuscation) {
-        content = JavaScriptObfuscator.obfuscate(content, {
-          compact: true,
-          controlFlowFlattening: true,
-          controlFlowFlatteningThreshold: 0.75,
-          numbersToExpressions: true,
-          simplify: true,
-          stringArray: true,
-          stringArrayEncoding: ['rc4'],
-          stringArrayThreshold: 0.75,
-          transformObjectKeys: true,
-          unicodeEscapeSequence: true
-        }).getObfuscatedCode();
+  return {
+    name: 'ez-runtime-config',
+    transformIndexHtml(html) {
+      if (!enableConfigJS) {
+        return html.replace('<!--EZ_CONFIG_SCRIPT-->', '');
       }
 
-      fs.writeFileSync(distPath, content, 'utf-8');
-      console.log(`生成獨立設定檔: ${extraScriptFileName}`);
-    } catch (err) {
-      console.warn('生成獨立設定檔失敗:', err);
+      return html.replace('<!--EZ_CONFIG_SCRIPT-->', `<script src="./${extraScriptFileName}"></script>`);
+    },
+    closeBundle() {
+      try {
+        let content = buildConfigScript();
+
+        // 与主站随机名配置文件一致，走混淆避免明文暴露站点配置
+        if (enableObfuscation) {
+          content = JavaScriptObfuscator.obfuscate(content, {
+            compact: true,
+            controlFlowFlattening: true,
+            controlFlowFlatteningThreshold: 0.75,
+            numbersToExpressions: true,
+            simplify: true,
+            stringArray: true,
+            stringArrayEncoding: ['rc4'],
+            stringArrayThreshold: 0.75,
+            transformObjectKeys: true,
+            unicodeEscapeSequence: true
+          }).getObfuscatedCode();
+        }
+
+        // landing 页面（landingpage.html）通过固定名 config.js 读取配置
+        const landingConfigPath = path.resolve(__dirname, 'dist', 'config.js');
+        fs.writeFileSync(landingConfigPath, content, 'utf-8');
+        console.log('生成站点配置文件: config.js（landing 页使用）');
+
+        // 可选：额外生成随机名配置文件供 index.html 使用（内容一致）
+        if (enableConfigJS) {
+          const distPath = path.resolve(__dirname, 'dist', extraScriptFileName);
+          fs.writeFileSync(distPath, content, 'utf-8');
+          console.log(`生成獨立設定檔: ${extraScriptFileName}`);
+        }
+      } catch (err) {
+        console.warn('生成獨立設定檔失敗:', err);
+      }
     }
-  }
-});
+  };
+};
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');

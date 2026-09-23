@@ -471,14 +471,16 @@
                   <div class="guide-icon">
                     <IconBrandApple :size="48"/>
                   </div>
-                  <p class="guide-text">需要非中国大陆区 Apple ID，部分地区 App Store 不支持下载。</p>
-                  <p class="guide-text-sub">请使用其他国家或地区 Apple ID 账号下载。查看苹果教程<a href="/#/docs" rel="noopener noreferrer"><span>使用文档部分</span></a>。</p>
-                  <a :href="clientConfig.clientLinks?.ios || '#'" target="_blank" rel="noopener noreferrer"
-                     class="btn-primary download-btn-main"
-                     :class="{ 'btn-disabled': !clientConfig.clientLinks?.ios || clientConfig.clientLinks.ios.includes('xxx') }">
-                    <IconBrandApple :size="16"/>
-                    <span>App Store 下载</span>
-                  </a>
+                  <p class="guide-text">App Store 需要用到美区 Apple ID，上线准备中</p>
+                  <p class="guide-text-sub">请先通过 TestFlight 下载安装</p>
+                  <div class="download-buttons">
+                    <a v-if="clientConfig.testflight?.showTestFlight !== false"
+                       href="./testflight.html" target="_blank" rel="noopener noreferrer"
+                       class="btn-primary download-btn-main">
+                      <IconBrandApple :size="16"/>
+                      <span>📦 TestFlight 下载</span>
+                    </a>
+                  </div>
                 </div>
               </template>
 
