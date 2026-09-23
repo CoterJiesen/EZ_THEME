@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'node:path';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import JavaScriptObfuscator from 'javascript-obfuscator';
 
 const generateRandomFileName = (length = 8) => {
@@ -17,7 +18,8 @@ const generateRandomFileName = (length = 8) => {
 
 const createClientReleasePlugin = ({ isProd }) => {
   const clientReleasePath = path.resolve(__dirname, 'src/utils/clientRelease.js');
-  const outputRelPath = 'static/ClientRelease.js';
+  // dev 环境使用的固定路径；生产构建会替换为带内容哈希的文件名
+  const devRelPath = 'static/ClientRelease.js';
   let viteBase = './'; // vite 最终解析后的 base（可能是 CDN 前缀）
 
   // 读取源文件并包装成 IIFE，挂载到 window.ClientRelease
@@ -69,21 +71,34 @@ ${body.replace(/^/gm, '  ')}
     return viteBase + relPath;
   }
 
-  // 更新 landingpage.html 中的脚本引用路径（加 CDN 前缀）
-  function patchLandingPage() {
+  // 取内容哈希（与 vite 产物一致，用短哈希即可）
+  function contentHash(code) {
+    return crypto.createHash('sha256').update(code).digest('hex').slice(0, 8);
+  }
+
+  // 更新 landingpage.html 中的脚本引用路径（指向带哈希的文件名 + CDN 前缀）
+  function patchLandingPage(relPath) {
     const landingHtmlPath = path.resolve(__dirname, 'dist', 'landingpage.html');
     if (!fs.existsSync(landingHtmlPath)) return; // 如果没有输出 landingpage.html 就跳过
 
     try {
       let html = fs.readFileSync(landingHtmlPath, 'utf-8');
-      const cdnUrl = resolveAssetUrl(outputRelPath);
+      const finalUrl = resolveAssetUrl(relPath);
       // 替换 landingpage.html 中的脚本引用
+      const before = html;
       html = html.replace(
         /src="\.\/static\/ClientRelease\.js"/g,
-        `src="${cdnUrl}"`
+        `src="${finalUrl}"`
       );
+      if (html === before) {
+        // 引用没被替换说明标记不匹配，静默产出旧引用会导致线上加载到过期脚本
+        console.warn(
+          '[client-release-utils] 未在 landingpage.html 找到 ./static/ClientRelease.js 引用，跳过替换'
+        );
+        return;
+      }
       fs.writeFileSync(landingHtmlPath, html, 'utf-8');
-      console.log(`更新 landingpage.html 引用: ${outputRelPath} → ${cdnUrl}`);
+      console.log(`更新 landingpage.html 引用: ${relPath} → ${finalUrl}`);
     } catch (err) {
       console.warn('[client-release-utils] 更新 landingpage.html 失败:', err.message);
     }
@@ -100,7 +115,7 @@ ${body.replace(/^/gm, '  ')}
     // dev 环境：拦截 /static/ClientRelease.js 请求
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        if (req.url.startsWith(`/${outputRelPath}`)) {
+        if (req.url.startsWith(`/${devRelPath}`)) {
           try {
             const content = buildIIFE();
             res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
@@ -116,24 +131,25 @@ ${body.replace(/^/gm, '  ')}
       });
     },
 
-    // 生产构建：写入 dist/static/ClientRelease.js（terser 压缩），并更新 landingpage.html 引用
+    // 生产构建：写入 dist/static/ClientRelease-<hash>.js（terser 压缩），并更新 landingpage.html 引用
     async closeBundle() {
       if (!isProd) return;
       try {
         let content = buildIIFE();
         content = await minifyCode(content);
-        const distFile = path.resolve(__dirname, 'dist', outputRelPath);
+
+        // 带内容哈希的文件名：内容变则 URL 变，避免 CDN 提供过期副本
+        const relPath = `static/ClientRelease-${contentHash(content)}.js`;
+        const distFile = path.resolve(__dirname, 'dist', relPath);
         const distDir = path.dirname(distFile);
         if (!fs.existsSync(distDir)) {
           fs.mkdirSync(distDir, { recursive: true });
         }
         fs.writeFileSync(distFile, content, 'utf-8');
-        console.log(`生成客户端 release 工具: ${outputRelPath} (${(Buffer.byteLength(content, 'utf-8') / 1024).toFixed(1)} kB)`);
+        console.log(`生成客户端 release 工具: ${relPath} (${(Buffer.byteLength(content, 'utf-8') / 1024).toFixed(1)} kB)`);
 
-        // 如果配置了 CDN，更新 landingpage.html 中的引用路径
-        if (viteBase && viteBase !== './' && viteBase !== '/') {
-          patchLandingPage();
-        }
+        // 文件名已带哈希，无论是否配置 CDN 都必须更新引用
+        patchLandingPage(relPath);
       } catch (err) {
         console.warn('[client-release-utils] 构建生成失败:', err);
       }

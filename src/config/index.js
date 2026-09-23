@@ -222,7 +222,7 @@ export const config  = {
     },
     ORDER_CONFIG: {
         // 下单前二次确认
-        confirmOrder: true,
+        confirmOrder: false,
         // 下单前二次确认内容
         confirmOrderContent: "<p><strong style='color: red'>无法提供相关教程和使用说明。</strong></p><p><strong style='color: red'>不会使用请勿购买，没有退款政策</strong></p>",
 
@@ -281,7 +281,7 @@ export const config  = {
 
         // 客户端下载链接  //可以改成文档链接直接在新标签页打开
         clientLinks: {
-            ios: 'https://apps.apple.com/app/xxx',
+            ios: 'https://apps.apple.com/us/app/shadowrocket/id932747118',
             android: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest',
             macos: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest',
             windows: 'https://github.com/go2world-icu/FlClash-Publish/releases/latest',

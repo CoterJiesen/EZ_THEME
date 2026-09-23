@@ -472,7 +472,7 @@
                     <IconBrandApple :size="48"/>
                   </div>
                   <p class="guide-text">需要非中国大陆区 Apple ID，部分地区 App Store 不支持下载。</p>
-                  <p class="guide-text-sub">请使用其他国家或地区 Apple ID 账号下载。请登录网站，查看使用文档部分。</p>
+                  <p class="guide-text-sub">请使用其他国家或地区 Apple ID 账号下载。查看苹果教程<a href="/#/docs" rel="noopener noreferrer"><span>使用文档部分</span></a>。</p>
                   <a :href="clientConfig.clientLinks?.ios || '#'" target="_blank" rel="noopener noreferrer"
                      class="btn-primary download-btn-main"
                      :class="{ 'btn-disabled': !clientConfig.clientLinks?.ios || clientConfig.clientLinks.ios.includes('xxx') }">
@@ -492,7 +492,6 @@
                 <div class="download-buttons">
                   <a :href="getPrimaryUrl(activeDownloadPlatform)" target="_blank" rel="noopener noreferrer"
                      class="btn-primary download-btn-main">
-                    <IconDownload :size="16"/>
                     <span>⬇ 下载客户端</span>
                   </a>
                   <a v-if="hasMirrorUrl(activeDownloadPlatform)"

@@ -1460,11 +1460,12 @@
             if (config.CLIENT_CONFIG.showWindows === false) document.getElementById('windowsClient').style.display = 'none';
             if (config.CLIENT_CONFIG.showMacOS === false) document.getElementById('macosClient').style.display = 'none';
 
-            // 设置主下载链接（作为 GitHub 动态获取失败时的兜底）
+            // 设置主下载链接（仅作兜底：若 release 数据已生效则不覆盖）
             const setPrimaryLink = (platform, linkUrl) => {
               if (!linkUrl || linkUrl === '#' || linkUrl === '') return;
               const btn = document.querySelector(`a[data-platform="${platform}"]`);
-              if (btn) {
+              // data-release-applied 由 release 逻辑写入，表示已拿到具体安装包地址
+              if (btn && !btn.hasAttribute('data-release-applied')) {
                 btn.href = linkUrl;
                 btn.target = '_blank';
                 btn.rel = 'noopener noreferrer';
@@ -1617,30 +1618,41 @@
         if (versionLine) versionLine.textContent = '当前最新版本 ' + (data.tag_name || '');
         var PLATFORMS = ['android', 'macos', 'windows'];
         PLATFORMS.forEach(function (platform) {
-          var primary = clientRelease.getPrimaryAsset(platform);
-          // 主下载按钮
-          var btn = document.querySelector('a[data-platform="' + platform + '"]');
-          if (primary && btn) btn.href = clientRelease.getPrimaryDownloadUrl(platform);
-          // 备用下载按钮
-          var mirrorBtn = document.querySelector('a[data-mirror="' + platform + '"]');
-          if (primary && mirrorBtn) {
-            mirrorBtn.href = clientRelease.getMirrorDownloadUrl(platform);
-            mirrorBtn.style.display = '';
-          }
-          // 其他版本列表（不含主下载已提供的架构）
-          var others = clientRelease.getOtherAssets(platform);
-          var ul = document.querySelector('ul[data-variants="' + platform + '"]');
-          if (ul && others.length) {
-            ul.innerHTML = others.map(function (a) {
-              var m = mirrorUrls(a.browser_download_url);
-              return '<li><a href="' + m[0] + '" target="_blank" rel="noopener">' +
-                     prettyName(a.name) + '<span class="size">(' + fmtSize(a.size) + ')</span></a>' +
-                     '<span class="mirrors"><a href="' + m[1] + '" target="_blank" rel="noopener">备用2</a></span></li>';
-            }).join('');
-          } else if (ul) {
-            // 没有其他版本时隐藏整个折叠框
-            var details = ul.closest('details.variants');
-            if (details) details.style.display = 'none';
+          // 单个平台出错不应影响其他平台（例如脚本版本过旧、缺少某个方法）
+          try {
+            var primary = clientRelease.getPrimaryAsset(platform);
+            // 主下载按钮
+            var btn = document.querySelector('a[data-platform="' + platform + '"]');
+            if (primary && btn) {
+              btn.href = clientRelease.getPrimaryDownloadUrl(platform);
+              // 标记已应用 release 地址，避免被 EZ_CONFIG 兜底逻辑覆盖
+              btn.setAttribute('data-release-applied', '1');
+            }
+            // 备用下载按钮
+            var mirrorBtn = document.querySelector('a[data-mirror="' + platform + '"]');
+            if (primary && mirrorBtn) {
+              mirrorBtn.href = clientRelease.getMirrorDownloadUrl(platform);
+              mirrorBtn.style.display = '';
+            }
+            // 其他版本列表（不含主下载已提供的架构）
+            var others = clientRelease.getOtherAssets
+              ? clientRelease.getOtherAssets(platform)
+              : [];
+            var ul = document.querySelector('ul[data-variants="' + platform + '"]');
+            if (ul && others.length) {
+              ul.innerHTML = others.map(function (a) {
+                var m = mirrorUrls(a.browser_download_url);
+                return '<li><a href="' + m[0] + '" target="_blank" rel="noopener">' +
+                       prettyName(a.name) + '<span class="size">(' + fmtSize(a.size) + ')</span></a>' +
+                       '<span class="mirrors"><a href="' + m[1] + '" target="_blank" rel="noopener">备用2</a></span></li>';
+              }).join('');
+            } else if (ul) {
+              // 没有其他版本时隐藏整个折叠框
+              var details = ul.closest('details.variants');
+              if (details) details.style.display = 'none';
+            }
+          } catch (e) {
+            console.warn('[clientRelease] 平台 ' + platform + ' 处理失败:', e);
           }
         });
       }
